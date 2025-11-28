@@ -2,9 +2,6 @@
 """
 QSL Card LaTeX Generator with PDF Generation and Settings Management
 A visual application to generate LaTeX code for amateur radio QSL cards
-
-Based on QSL Card design by Ian Renton M0TRT (Public Domain), which was based on an example by Fabian Kurz, DJ5CW.
-
 """
 
 import sys
@@ -41,10 +38,12 @@ class QSLCardGenerator:
             self.station_tab = ttk.Frame(self.notebook)
             self.contact_tab = ttk.Frame(self.notebook)
             self.output_tab = ttk.Frame(self.notebook)
+            self.about_tab = ttk.Frame(self.notebook)
             
             self.notebook.add(self.station_tab, text="Station Info")
             self.notebook.add(self.contact_tab, text="Contact Details")
             self.notebook.add(self.output_tab, text="LaTeX Output")
+            self.notebook.add(self.about_tab, text="About")
             
             # Initialize fields
             self.fields = {}
@@ -56,6 +55,7 @@ class QSLCardGenerator:
             self.setup_station_tab()
             self.setup_contact_tab()
             self.setup_output_tab()
+            self.setup_about_tab()
             
             # Load saved settings
             self.load_settings()
@@ -341,6 +341,67 @@ class QSLCardGenerator:
         # Text area for output
         self.output_text = scrolledtext.ScrolledText(frame, wrap=tk.WORD, width=80, height=30)
         self.output_text.pack(fill='both', expand=True)
+    
+    def setup_about_tab(self):
+        """Setup the about tab"""
+        frame = ttk.Frame(self.about_tab, padding="20")
+        frame.pack(fill='both', expand=True)
+        
+        # Create a centered frame
+        center_frame = ttk.Frame(frame)
+        center_frame.place(relx=0.5, rely=0.5, anchor='center')
+        
+        # Title
+        title_label = ttk.Label(center_frame, 
+                                text="QSL Card Generator",
+                                font=('Arial', 20, 'bold'))
+        title_label.pack(pady=(0, 10))
+        
+        # Version
+        version_label = ttk.Label(center_frame,
+                                  text="Version 1.3",
+                                  font=('Arial', 12))
+        version_label.pack(pady=(0, 20))
+        
+        # Author info
+        author_label = ttk.Label(center_frame,
+                                text="Andrés Ortiz, EA7HQL",
+                                font=('Arial', 14, 'bold'))
+        author_label.pack(pady=(0, 30))
+        
+        # Credits
+        credits_frame = ttk.Frame(center_frame)
+        credits_frame.pack(pady=(0, 20))
+        
+        credits_title = ttk.Label(credits_frame,
+                                 text="Credits:",
+                                 font=('Arial', 11, 'bold'))
+        credits_title.pack(pady=(0, 10))
+        
+        credits_text = ttk.Label(credits_frame,
+                                text="Based on QSL Card design by Ian Renton M0TRT (Public Domain),\n"
+                                     "which was based on an example by Fabian Kurz, DJ5CW.",
+                                font=('Arial', 12),
+                                justify='center')
+        credits_text.pack()
+        
+        # Additional info
+        info_frame = ttk.Frame(center_frame)
+        info_frame.pack(pady=(30, 0))
+        
+        info_label = ttk.Label(info_frame,
+                              text="Amateur Radio QSL Card Generator\n"
+                                   "with LaTeX and PDF support",
+                              font=('Arial', 10, 'italic'),
+                              justify='center',
+                              foreground='gray')
+        info_label.pack(pady=(0, 20))
+        
+        # 73 message
+        sign_off = ttk.Label(center_frame,
+                            text="73 and Good DX!",
+                            font=('Arial', 12, 'bold'))
+        sign_off.pack()
     
     def clear_contact_fields(self):
         """Clear only contact-specific fields, keeping station info and equipment"""
