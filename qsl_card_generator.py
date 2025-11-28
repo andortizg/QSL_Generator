@@ -2,6 +2,9 @@
 """
 QSL Card LaTeX Generator with PDF Generation and Settings Management
 A visual application to generate LaTeX code for amateur radio QSL cards
+
+Based on QSL Card design by Ian Renton M0TRT (Public Domain), which was based on an example by Fabian Kurz, DJ5CW.
+
 """
 
 import sys
