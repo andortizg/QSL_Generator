@@ -56,7 +56,7 @@ brew install mactex
 **Windows:**
 Download and install [MiKTeX](https://miktex.org/)
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Download
 ```bash
@@ -364,7 +364,7 @@ Generator application provided as-is for amateur radio use.
 - **v1.0** - Current version
 
 
-## 🎓 Learning Resources
+## Learning Resources
 
 ### LaTeX Basics
 - [LaTeX Project](https://www.latex-project.org/)
@@ -417,5 +417,6 @@ Generator application provided as-is for amateur radio use.
 ```
 
 
-**73 and Good DX!** 📻
+**73 and Good DX!** 
 
+**Andrés, EA7HQL**
