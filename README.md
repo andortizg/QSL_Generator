@@ -1,20 +1,21 @@
 # QSL Card LaTeX Generator
 
-A professional Python application for generating customized amateur radio QSL cards with LaTeX. Features an intuitive GUI, automatic PDF generation, and persistent settings management.
+A Python application for generating customized amateur radio QSL cards with LaTeX. Features an intuitive GUI, automatic PDF generation, and persistent settings management.
+Based on QSL Card design by Ian Renton M0TRT (Public Domain), which was based on an example by Fabian Kurz, DJ5CW.
 
 ![Version](https://img.shields.io/badge/version-1.3-blue)
 ![Python](https://img.shields.io/badge/python-3.6+-green)
 ![License](https://img.shields.io/badge/license-Public_Domain-lightgrey)
 
-## ✨ Features
+## Features
 
 ### Core Capabilities
-- **🎨 Visual GUI Interface** - Easy-to-use tabbed interface with organized sections
-- **📄 Direct PDF Generation** - Create print-ready PDFs with one click
-- **💾 Automatic Settings** - Save and load your station configuration automatically
-- **🔧 Customizable Design** - Adjust logo sizes, images, and layout
-- **⚡ Fast Workflow** - Generate multiple QSL cards quickly
-- **📊 Real-time Status** - Status bar shows progress and confirmations
+- ** Visual GUI Interface** - Easy-to-use tabbed interface with organized sections
+- ** Direct PDF Generation** - Create print-ready PDFs with one click
+- ** Automatic Settings** - Save and load your station configuration automatically
+- ** Customizable Design** - Adjust logo sizes, images, and layout
+- ** Fast Workflow** - Generate multiple QSL cards quickly
+- ** Real-time Status** - Status bar shows progress and confirmations
 
 ### Station Management
 - Complete station information storage
@@ -28,7 +29,7 @@ A professional Python application for generating customized amateur radio QSL ca
 - **Logo Scale Control** - Adjust size of each logo independently
 - **Default Values** - Pre-filled with sensible defaults
 
-## 📋 Requirements
+## Requirements
 
 ### Essential
 - **Python 3.6+** (usually pre-installed on Linux/macOS)
@@ -88,7 +89,7 @@ python3 qsl_card_generator_final.py
    - Fill in your callsign, name, QTH, grid locator
    - Add your equipment (transceiver, power, antenna)
    - Configure image files and logo scales
-   - Click **"Save Defaults"** ⭐
+   - Click **"Save Defaults"** 
 
 2. **You're Ready!** Your configuration is saved permanently
 
@@ -97,11 +98,11 @@ python3 qsl_card_generator_final.py
 2. Go to **Contact Details** tab
 3. Fill in: Their callsign, date, time, band, mode, report
 4. Go to **LaTeX Output** tab
-5. Click **"Generate PDF"** 🎉
+5. Click **"Generate PDF"** 
 6. Save your PDF
 7. Click **"Clear All"** for the next QSO
 
-## 📖 Detailed Usage
+## Detailed Usage
 
 ### Interface Overview
 
@@ -194,7 +195,7 @@ Balanced logos:   0.1,  0.1,  0.1
 }
 ```
 
-## 💡 Workflow Examples
+## Workflow Examples
 
 ### First QSO of the Day
 ```
@@ -221,7 +222,7 @@ Average: 2 minutes per card
 4. Done - all future cards use new equipment
 ```
 
-## 🎨 Customization
+## Customization
 
 ### Custom Background Image
 1. Replace `foto_antenas.jpg` with your image
@@ -239,7 +240,7 @@ Average: 2 minutes per card
 3. Edit with any text editor
 4. Compile with `pdflatex yourfile.tex`
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### "tkinter not found"
 ```bash
@@ -277,7 +278,7 @@ sudo dnf install python3-tkinter
 - Click "Load Defaults" button
 - Or fill in data and "Save Defaults"
 
-## 📁 Recommended Directory Structure
+## Recommended Directory Structure
 
 ```
 qsl_cards/
@@ -292,14 +293,14 @@ qsl_cards/
     └── ...
 ```
 
-## 🔐 Data Privacy
+## Data Privacy
 
 - All data stored locally only
 - Settings file on your computer
 - No internet connection required (except for optional updates)
 - No telemetry or tracking
 
-## 🤝 Contributing
+## Contributing
 
 Contributions welcome! Areas for improvement:
 - Additional card templates
@@ -308,39 +309,14 @@ Contributions welcome! Areas for improvement:
 - Batch processing
 - Multi-language support
 
-## 📜 License
+## License
 
 Based on QSL Card design by Ian Renton M0TRT (Public Domain), which was based on an example by Fabian Kurz, DJ5CW.
 
 Generator application provided as-is for amateur radio use.
 
-## 🆘 Support
 
-### Getting Help
-1. Check troubleshooting section
-2. Review documentation files:
-   - `README_EN.md` - Full documentation
-   - `QUICKSTART_EN.md` - Quick start guide
-   - `UPDATE_NOTES_*.md` - Version changes
-
-### Reporting Issues
-When reporting problems, include:
-- Operating system and version
-- Python version (`python3 --version`)
-- LaTeX version (`pdflatex --version`)
-- Error messages (complete text)
-- Steps to reproduce
-
-## 📚 Additional Documentation
-
-- **README_EN.md** - Complete English documentation
-- **README_ES.md** - Documentación completa en español
-- **QUICKSTART_EN.md** - English quick start guide
-- **QUICKSTART_ES.md** - Guía rápida en español
-- **UPDATE_NOTES_v1.2.md** - Equipment and logo scale features
-- **LAYOUT_UPDATE_v1.3.md** - Interface improvements
-
-## 🎯 Use Cases
+## Use Cases
 
 ### Contest Operations
 - Generate multiple cards quickly
@@ -362,12 +338,6 @@ When reporting problems, include:
 - Commemorative cards
 - Multiple QTH support
 
-## ⚡ Performance
-
-- PDF generation: ~5-10 seconds
-- Card creation workflow: ~2 minutes
-- Batch of 10 cards: ~15-20 minutes
-- No slowdown with continued use
 
 ## 🔍 Technical Details
 
@@ -385,16 +355,14 @@ When reporting problems, include:
 - Standard library only - no pip packages needed
 
 ### Cross-Platform
-- ✅ Linux (tested on Ubuntu, Debian, Fedora)
-- ✅ macOS (tested on 10.14+)
-- ✅ Windows (tested on Windows 10, 11)
+- Linux (tested on Ubuntu, Debian, Fedora)
+- macOS (tested on 10.14+)
+- Windows (tested on Windows 10, 11)
 
-## 📊 Version History
+## Version History
 
-- **v1.3** - Equipment tab removed, logo scales repositioned
-- **v1.2** - Equipment in Station Info, logo scale controls
-- **v1.1** - Equipment defaults, improved handling
-- **v1.0** - Initial release with PDF generation
+- **v1.0** - Current version
+
 
 ## 🎓 Learning Resources
 
@@ -407,7 +375,7 @@ When reporting problems, include:
 - Amateur radio club resources
 - QSL card design guides
 
-## 🌟 Tips & Tricks
+## Tips & Tricks
 
 1. **Save time**: Configure once, use forever
 2. **Test first**: Generate sample card before printing batch
@@ -417,21 +385,7 @@ When reporting problems, include:
 6. **Shortcuts**: Use Tab key to navigate fields quickly
 7. **Organization**: Save PDFs with date_callsign.pdf naming
 
-## 📞 Amateur Radio Resources
 
-- **QRZ.com** - Callsign lookup
-- **ARRL** - QSL bureau services
-- **LoTW** - Logbook of the World
-- **eQSL** - Electronic QSL cards
-- **Club Log** - Logging and statistics
-
-## 🎉 Success Stories
-
-*"Generated 100+ QSL cards for Field Day in under 2 hours!"* - Contest operator
-
-*"The PDF generation feature saves so much time compared to manual compilation."* - DX enthusiast
-
-*"Logo scaling finally lets me get the perfect look for my cards."* - QSL designer
 
 ---
 
@@ -462,12 +416,6 @@ When reporting problems, include:
 └─────────────────────────────────────────┘
 ```
 
----
 
 **73 and Good DX!** 📻
 
-**Questions?** Check the documentation files or the troubleshooting section.
-
-**Updates?** Watch for new versions with additional features.
-
-**Enjoying the generator?** Share with your amateur radio club!
