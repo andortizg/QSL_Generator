@@ -10,12 +10,12 @@ Based on QSL Card design by Ian Renton M0TRT (Public Domain), which was based on
 ## Features
 
 ### Core Capabilities
-- Visual GUI Interface** - Easy-to-use tabbed interface with organized sections
-- Direct PDF Generation** - Create print-ready PDFs with one click
-- Automatic Settings** - Save and load your station configuration automatically
-- Customizable Design** - Adjust logo sizes, images, and layout
-- Fast Workflow** - Generate multiple QSL cards quickly
-- Real-time Status** - Status bar shows progress and confirmations
+- Visual GUI Interface - Easy-to-use tabbed interface with organized sections
+- Direct PDF Generation - Create print-ready PDFs with one click
+- Automatic Settings - Save and load your station configuration automatically
+- Customizable Design - Adjust logo sizes, images, and layout
+- Fast Workflow - Generate multiple QSL cards quickly
+- Real-time Status - Status bar shows progress and confirmations
 
 ### Station Management
 - Complete station information storage
