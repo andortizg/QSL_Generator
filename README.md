@@ -269,8 +269,8 @@ qsl_cards/
 ├── qrz_com.png
 ├── lotw.png
 └── generated/
-    ├── 2024-11-28_K1ABC.pdf
-    ├── 2024-11-28_W2XYZ.pdf
+    ├── 2024-11-28_EA7XXX.pdf
+    ├── 2024-11-28_EA7ZZZ.pdf
     └── ...
 ```
 
