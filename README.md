@@ -72,7 +72,7 @@ cd qsl-generator
 Place these files in the same directory as the script:
 ```
 qsl_generator/
-├── qsl_card_generator_final.py
+├── qsl_card_generator.py
 ├── foto_antenas.jpg          # Your background image
 ├── logo_ure_negro.png         # URE logo
 ├── qrz_com.png                # QRZ.com logo
@@ -81,7 +81,7 @@ qsl_generator/
 
 ### 3. Run the Application
 ```bash
-python3 qsl_card_generator_final.py
+python3 qsl_card_generator.py
 ```
 
 ### 4. First-Time Setup
