@@ -171,7 +171,7 @@ Balanced logos:   0.1,  0.1,  0.1
 - Test with sample data
 - Adjust and save new defaults
 
-## 🔧 Configuration
+## Configuration
 
 ### Settings File Location
 **Linux/macOS:** `~/.qsl_generator_settings.json`  
@@ -193,25 +193,6 @@ Balanced logos:   0.1,  0.1,  0.1
   "logo1_scale": "0.07",
   ...
 }
-```
-
-## Workflow Examples
-
-### First QSO of the Day
-```
-1. Open application → Data loads automatically
-2. Fill Contact Details → 2 minutes
-3. Generate PDF → 30 seconds
-4. Print
-```
-
-### Multiple QSOs
-```
-1. Fill contact → Generate PDF → Clear All
-2. Fill contact → Generate PDF → Clear All
-3. Fill contact → Generate PDF → Clear All
-   ⋮
-Average: 2 minutes per card
 ```
 
 ### Changing Equipment
@@ -315,31 +296,7 @@ Based on QSL Card design by Ian Renton M0TRT (Public Domain), which was based on
 
 Generator application provided as-is for amateur radio use.
 
-
-## Use Cases
-
-### Contest Operations
-- Generate multiple cards quickly
-- Clear All between contacts
-- Consistent formatting
-
-### DX Operations
-- Professional appearance
-- Custom images for special operations
-- Portable mode support
-
-### Club Stations
-- Multiple operator support (change name)
-- Shared equipment configuration
-- Standardized design
-
-### Special Events
-- Custom background for events
-- Commemorative cards
-- Multiple QTH support
-
-
-## 🔍 Technical Details
+## Technical Details
 
 ### Generated LaTeX
 - Uses standard LaTeX packages
@@ -375,48 +332,6 @@ Generator application provided as-is for amateur radio use.
 - Amateur radio club resources
 - QSL card design guides
 
-## Tips & Tricks
-
-1. **Save time**: Configure once, use forever
-2. **Test first**: Generate sample card before printing batch
-3. **Backup**: Keep copy of settings file
-4. **Images**: Use high-resolution images (300 DPI)
-5. **Workflow**: Keep application open during contest
-6. **Shortcuts**: Use Tab key to navigate fields quickly
-7. **Organization**: Save PDFs with date_callsign.pdf naming
 
 
 
----
-
-## Quick Reference Card
-
-```
-┌─────────────────────────────────────────┐
-│     QSL Card Generator Quick Ref        │
-├─────────────────────────────────────────┤
-│ First Time:                             │
-│   1. Fill Station Info + Equipment      │
-│   2. Save Defaults                      │
-│                                         │
-│ Each QSO:                               │
-│   1. Fill Contact Details               │
-│   2. Generate PDF                       │
-│   3. Clear All                          │
-│                                         │
-│ Key Buttons:                            │
-│   Save Defaults  → Save config          │
-│   Generate PDF   → Create card          │
-│   Clear All      → Reset contacts       │
-│                                         │
-│ Logo Scales:                            │
-│   0.05-0.1  → Small                     │
-│   0.1-0.2   → Medium                    │
-│   0.2-0.3   → Large                     │
-└─────────────────────────────────────────┘
-```
-
-
-**73 and Good DX!** 
-
-**Andrés, EA7HQL**
