@@ -61,7 +61,7 @@ Download and install [MiKTeX](https://miktex.org/)
 ### 1. Download
 ```bash
 # Download the script
-wget https://your-url/qsl_card_generator_final.py
+wget https://your-url/qsl_card_generator.py
 
 # Or clone the repository
 git clone https://your-repo/qsl-generator
