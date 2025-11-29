@@ -263,7 +263,7 @@ sudo dnf install python3-tkinter
 
 ```
 qsl_cards/
-├── qsl_card_generator_final.py
+├── qsl_card_generator.py
 ├── foto_antenas.jpg
 ├── logo_ure_negro.png
 ├── qrz_com.png
