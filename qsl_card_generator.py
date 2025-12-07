@@ -10,6 +10,8 @@ import json
 import subprocess
 import tempfile
 import shutil
+import threading
+import time
 
 # Try to import tkinter for GUI mode
 try:
@@ -47,6 +49,9 @@ class QSLCardGenerator:
             
             # Initialize fields
             self.fields = {}
+            
+            # Variables for threading communication
+            self.thread_result = {}
             
             # Add status bar first (before loading settings)
             self.setup_status_bar()
@@ -113,7 +118,8 @@ class QSLCardGenerator:
             'logo2': "qrz_com.png",
             'logo2_scale': "0.2",
             'logo3': "lotw.png",
-            'logo3_scale': "0.1"
+            'logo3_scale': "0.1",
+            'closing_text': "" 
         }
     
     def setup_station_tab(self):
@@ -317,6 +323,13 @@ class QSLCardGenerator:
                        variable=self.fields['qsl_request'], value="pse").pack(side='left', padx=5)
         ttk.Radiobutton(qsl_request_frame, text="TNX (Thanks)", 
                        variable=self.fields['qsl_request'], value="tnx").pack(side='left', padx=5)
+        row += 1
+
+        # Comments (Moved from Station Tab)
+        ttk.Label(frame, text="Comments:", font=('Arial', 10, 'bold')).grid(
+            row=row, column=0, sticky='e', padx=5, pady=(15, 5))
+        self.fields['closing_text'] = ttk.Entry(frame, width=40)
+        self.fields['closing_text'].grid(row=row, column=1, sticky='w', padx=5, pady=(15, 5))
     
     def setup_output_tab(self):
         """Setup the output tab"""
@@ -332,7 +345,7 @@ class QSLCardGenerator:
         ttk.Button(button_frame, text="Generate LaTeX", 
                   command=self.generate_latex, width=15).pack(side='left', padx=5)
         ttk.Button(button_frame, text="Generate PDF", 
-                  command=self.generate_pdf, width=15).pack(side='left', padx=5)
+                  command=self.initiate_pdf_generation, width=15).pack(side='left', padx=5)
         ttk.Button(button_frame, text="Save LaTeX", 
                   command=self.save_to_file, width=15).pack(side='left', padx=5)
         ttk.Button(button_frame, text="Copy to Clipboard", 
@@ -359,7 +372,7 @@ class QSLCardGenerator:
         
         # Version
         version_label = ttk.Label(center_frame,
-                                  text="Version 1.3",
+                                  text="Version 1.8",
                                   font=('Arial', 12))
         version_label.pack(pady=(0, 20))
         
@@ -407,7 +420,7 @@ class QSLCardGenerator:
         """Clear only contact-specific fields, keeping station info and equipment"""
         if messagebox.askyesno("Clear Fields", "Clear all contact details fields?"):
             contact_fields = ['via', 'to_station', 'their_call', 'date', 'time', 
-                            'band', 'mode', 'report', 'portable_location']
+                            'band', 'mode', 'report', 'portable_location', 'closing_text']
             
             for field_name in contact_fields:
                 if field_name in self.fields:
@@ -433,7 +446,8 @@ class QSLCardGenerator:
                       'grid', 'cq_zone', 'itu_zone', 'email', 'qrz_url',
                       'transceiver', 'power', 'antenna', 'satellite',
                       'background_image', 'logo1', 'logo2', 'logo3',
-                      'logo1_scale', 'logo2_scale', 'logo3_scale']
+                      'logo1_scale', 'logo2_scale', 'logo3_scale',
+                      'closing_text'] # Added closing_text to save
         
         for field_name in save_fields:
             if field_name in self.fields:
@@ -477,7 +491,8 @@ class QSLCardGenerator:
                 'logo2': "qrz_com.png",
                 'logo2_scale': "0.2",
                 'logo3': "lotw.png",
-                'logo3_scale': "0.1"
+                'logo3_scale': "0.1",
+                'closing_text': "" # Added default
             }
             
             for field_name, value in defaults.items():
@@ -563,6 +578,9 @@ class QSLCardGenerator:
         logo2_scale = self.get_field_value('logo2_scale') or "0.2"
         logo3 = self.get_field_value('logo3') or "lotw.png"
         logo3_scale = self.get_field_value('logo3_scale') or "0.1"
+
+        # Extra text below VY 73
+        closing_text = self.get_field_value('closing_text')
         
         # Generate checkboxes
         home_check = "$\\boxtimes$" if qth_type == "home" else "$\\square$"
@@ -573,6 +591,7 @@ class QSLCardGenerator:
         tnx_check = "$\\boxtimes$" if qsl_request == "tnx" else "$\\square$"
         
         # Build the LaTeX document
+        # Modified column widths: Date 5.5em->5.0em, Time 5em->4.5em, Band 6em->7.0em
         latex_code = f"""% QSL Card design by Ian Renton M0TRT. Public domain. Based on an example by Fabian Kurz, DJ5CW.
 
 \\documentclass[10pt]{{article}}
@@ -640,9 +659,9 @@ class QSLCardGenerator:
 \\smallskip
 
 \\begin{{center}}
-\\begin{{tabular}}{{|w{{c}}{{5em}}|w{{c}}{{6.5em}}|w{{c}}{{6em}}|w{{c}}{{4em}}|w{{c}}{{4em}}|w{{c}}{{4em}}|}}
+\\begin{{tabular}}{{|w{{c}}{{5em}}|w{{c}}{{5.0em}}|w{{c}}{{4.5em}}|w{{c}}{{7.0em}}|w{{c}}{{4em}}|w{{c}}{{4em}}|}}
 \\hline
-{{\\footnotesize Your Call}}&{{\\footnotesize Date (D/M/Y)}}&{{\\footnotesize Time (UTC)}}&{{\\footnotesize Band}}&{{\\footnotesize Mode}}&{{\\footnotesize Report}}\\\\
+{{\\footnotesize Your Call}}&{{\\footnotesize Date (D/M/Y)}}&{{\\footnotesize Time (UTC)}}&{{\\footnotesize Band / Freq}}&{{\\footnotesize Mode}}&{{\\footnotesize Report}}\\\\
 \\hline
 \\vphantom{{$\\dfrac b b$}} {their_call} & {date} & {time} & {band} & {mode} & {report} \\\\
 \\hline
@@ -679,8 +698,10 @@ class QSLCardGenerator:
 \\begin{{minipage}}{{0.3\\textwidth}}
 \\vspace{{0.5em}}
 {{\\footnotesize VY 73,}}
+\\vspace{{0.2em}}
+{{\\footnotesize {closing_text}}}
 
-\\vspace{{1.5em}}
+\\vspace{{1.2em}}
 \\makebox{{\\rule[-0.5em]{{11em}}{{0.4pt}}}}
 \\end{{minipage}}
 
@@ -699,8 +720,8 @@ class QSLCardGenerator:
         self.update_status("LaTeX code generated successfully")
         messagebox.showinfo("Success", "LaTeX code generated successfully!")
     
-    def generate_pdf(self):
-        """Generate PDF from the LaTeX code"""
+    def initiate_pdf_generation(self):
+        """Start the PDF generation process with a popup"""
         # Check if pdflatex is available
         if not shutil.which('pdflatex'):
             messagebox.showerror("Error", 
@@ -710,13 +731,69 @@ class QSLCardGenerator:
                 "  Fedora: sudo dnf install texlive-scheme-basic\n"
                 "  macOS: brew install mactex")
             return
+
+        # Prepare arguments to pass to the thread
+        # We need to gather these in the main thread to avoid GUI race conditions
+        latex_code = self.generate_latex_code()
+        image_files = [
+            self.get_field_value('background_image') or "foto_antenas.jpg",
+            self.get_field_value('logo1') or "logo_ure_negro.png",
+            self.get_field_value('logo2') or "qrz_com.png",
+            self.get_field_value('logo3') or "lotw.png"
+        ]
+
+        # Check images first (GUI interaction)
+        missing_images = []
+        for img in image_files:
+            if not os.path.exists(img):
+                missing_images.append(img)
         
-        self.update_status("Generating PDF...")
+        if missing_images:
+            response = messagebox.askyesno("Missing Images",
+                f"The following image files were not found:\n" +
+                "\n".join(f"  • {img}" for img in missing_images) +
+                "\n\nDo you want to continue anyway?\n" +
+                "(PDF generation may fail)")
+            if not response:
+                return
+
+        # Create the popup window
+        self.popup = tk.Toplevel(self.root)
+        self.popup.title("Processing")
+        self.popup.geometry("300x120")
+        self.popup.resizable(False, False)
+        # Center the popup
+        x = self.root.winfo_x() + (self.root.winfo_width() // 2) - 150
+        y = self.root.winfo_y() + (self.root.winfo_height() // 2) - 60
+        self.popup.geometry(f"+{x}+{y}")
         
+        # Make it modal (block other interaction)
+        self.popup.transient(self.root)
+        self.popup.grab_set()
+        
+        # Content
+        ttk.Label(self.popup, text="Generating PDF...", font=('Arial', 11, 'bold')).pack(pady=(20, 10))
+        ttk.Label(self.popup, text="Please wait while pdflatex runs.").pack(pady=(0, 10))
+        
+        self.progress_bar = ttk.Progressbar(self.popup, mode='indeterminate')
+        self.progress_bar.pack(fill='x', padx=20, pady=5)
+        self.progress_bar.start(10)
+
+        # Start the thread
+        self.thread_result = {} # Clear previous results
+        generation_thread = threading.Thread(
+            target=self.run_pdflatex_thread,
+            args=(latex_code, image_files)
+        )
+        generation_thread.start()
+        
+        # Start checking for completion
+        self.root.after(100, self.check_thread_completion, generation_thread)
+
+    def run_pdflatex_thread(self, latex_code, image_files):
+        """Background thread function to run pdflatex"""
+        temp_dir = None
         try:
-            # Generate LaTeX code
-            latex_code = self.generate_latex_code()
-            
             # Create temporary directory
             temp_dir = tempfile.mkdtemp()
             tex_file = os.path.join(temp_dir, "qsl_card.tex")
@@ -725,34 +802,12 @@ class QSLCardGenerator:
             with open(tex_file, 'w', encoding='utf-8') as f:
                 f.write(latex_code)
             
-            # Copy image files to temp directory if they exist
-            image_files = [
-                self.get_field_value('background_image') or "foto_antenas.jpg",
-                self.get_field_value('logo1') or "logo_ure_negro.png",
-                self.get_field_value('logo2') or "qrz_com.png",
-                self.get_field_value('logo3') or "lotw.png"
-            ]
-            
-            missing_images = []
+            # Copy image files
             for img in image_files:
                 if os.path.exists(img):
                     shutil.copy(img, temp_dir)
-                else:
-                    missing_images.append(img)
-            
-            if missing_images:
-                response = messagebox.askyesno("Missing Images",
-                    f"The following image files were not found:\n" +
-                    "\n".join(f"  • {img}" for img in missing_images) +
-                    "\n\nDo you want to continue anyway?\n" +
-                    "(PDF generation may fail)")
-                if not response:
-                    shutil.rmtree(temp_dir)
-                    self.update_status("PDF generation cancelled")
-                    return
             
             # Run pdflatex
-            self.update_status("Running pdflatex (this may take a moment)...")
             process = subprocess.run(
                 ['pdflatex', '-interaction=nonstopmode', 'qsl_card.tex'],
                 cwd=temp_dir,
@@ -764,6 +819,55 @@ class QSLCardGenerator:
             pdf_file = os.path.join(temp_dir, "qsl_card.pdf")
             
             if os.path.exists(pdf_file):
+                self.thread_result = {
+                    "success": True,
+                    "pdf_path": pdf_file,
+                    "temp_dir": temp_dir # Keep it to copy out, then delete
+                }
+            else:
+                # Capture error log
+                log_file = os.path.join(temp_dir, "qsl_card.log")
+                error_msg = process.stderr
+                if os.path.exists(log_file):
+                    with open(log_file, 'r') as f:
+                        log_content = f.read()
+                    lines = log_content.split('\n')
+                    error_lines = [l for l in lines if '!' in l or 'Error' in l or 'error' in l]
+                    if error_lines:
+                        error_msg = "Errors found:\n" + "\n".join(error_lines[:10])
+                
+                self.thread_result = {
+                    "success": False,
+                    "error": error_msg,
+                    "temp_dir": temp_dir
+                }
+
+        except Exception as e:
+            self.thread_result = {
+                "success": False,
+                "error": str(e),
+                "temp_dir": temp_dir
+            }
+
+    def check_thread_completion(self, thread):
+        """Check if the background thread is finished"""
+        if thread.is_alive():
+            # Check again in 100ms
+            self.root.after(100, self.check_thread_completion, thread)
+        else:
+            # Thread is done
+            self.progress_bar.stop()
+            self.popup.destroy()
+            self.finalize_pdf_generation()
+
+    def finalize_pdf_generation(self):
+        """Handle the result of the PDF generation"""
+        result = self.thread_result
+        temp_dir = result.get("temp_dir")
+
+        if result.get("success"):
+            pdf_file = result.get("pdf_path")
+            try:
                 # Ask user where to save the PDF
                 save_path = filedialog.asksaveasfilename(
                     defaultextension=".pdf",
@@ -779,34 +883,20 @@ class QSLCardGenerator:
                         "You can now print your QSL card.")
                 else:
                     self.update_status("PDF generation cancelled by user")
-            else:
-                # Show error log
-                log_file = os.path.join(temp_dir, "qsl_card.log")
-                error_msg = "PDF generation failed.\n\n"
-                if os.path.exists(log_file):
-                    with open(log_file, 'r') as f:
-                        log_content = f.read()
-                    # Extract relevant errors
-                    lines = log_content.split('\n')
-                    error_lines = [l for l in lines if '!' in l or 'Error' in l or 'error' in l]
-                    if error_lines:
-                        error_msg += "Errors found:\n" + "\n".join(error_lines[:10])
-                else:
-                    error_msg += process.stderr
-                
-                messagebox.showerror("Error", error_msg)
-                self.update_status("PDF generation failed")
-            
-            # Clean up
-            shutil.rmtree(temp_dir)
-            
-        except subprocess.TimeoutExpired:
-            messagebox.showerror("Error", "PDF generation timed out. Check your LaTeX installation.")
-            self.update_status("PDF generation timed out")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to generate PDF: {str(e)}")
-            self.update_status(f"Error: {str(e)}")
-    
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to save PDF: {str(e)}")
+        else:
+            error_msg = result.get("error", "Unknown error")
+            messagebox.showerror("Generation Failed", f"PDF generation failed.\n\n{error_msg}")
+            self.update_status("PDF generation failed")
+
+        # Clean up temp dir
+        if temp_dir and os.path.exists(temp_dir):
+            try:
+                shutil.rmtree(temp_dir)
+            except:
+                pass
+
     def save_to_file(self):
         """Save the generated LaTeX to a file"""
         content = self.output_text.get(1.0, tk.END)
