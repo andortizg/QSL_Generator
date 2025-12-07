@@ -274,12 +274,6 @@ qsl_cards/
     └── ...
 ```
 
-## Data Privacy
-
-- All data stored locally only
-- Settings file on your computer
-- No internet connection required (except for optional updates)
-- No telemetry or tracking
 
 ## Contributing
 
@@ -318,19 +312,10 @@ Generator application provided as-is for amateur radio use.
 
 ## Version History
 
-- **v1.0** - Current version
+- **v1.0** - Initial version
+- **v1.3** - Current version
 
 
-## Learning Resources
-
-### LaTeX Basics
-- [LaTeX Project](https://www.latex-project.org/)
-- [Overleaf Documentation](https://www.overleaf.com/learn)
-
-### QSL Card Design
-- [ARRL QSL Information](http://www.arrl.org/qsl)
-- Amateur radio club resources
-- QSL card design guides
 
 
 
